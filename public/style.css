@@ -49,7 +49,7 @@ nav {
     background-color:lightslategrey;
     z-index: 2;
     position: absolute;
-    height: 120px;
+    height: auto;
     width: 70px;
 }
 

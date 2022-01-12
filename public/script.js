@@ -5,26 +5,18 @@ let timeout;
 let pointerX = 0;
 let pointerY = 0;
 
-const characters = [
-    {
-        'name': 'Waldo',
-        'posX': 2140,
-        'posY': 1140
-    },
-    {
-        'name': 'Wizard',
-        'posX': 140,
-        'posY': 1170
-    },
-    {
-        'name': 'Odlaw',
-        'posX': 760,
-        'posY': 970
-    }
-];
+const characters = [];
 
 
 const image = document.getElementById('main').getElementsByTagName('img');
+
+function startGame() {
+    characters.push({'name': 'Waldo','posX': 2140,'posY': 1140});
+    characters.push({'name': 'Wizard','posX': 140,'posY': 1170});
+    characters.push({'name': 'Odlaw','posX': 760,'posY': 970});
+    document.getElementsByTagName('button')[0].disabled = true;
+    startTimer();
+}
 
 function startTimer() {
     timeout = setInterval(() => {
@@ -44,12 +36,14 @@ function startTimer() {
     }, 1000);
 }
 
-function stop() {
+function stopGame() {
+    window.alert(`Votre score: ${document.getElementById('timer').innerText}`);
     clearInterval(timeout);
     seconde = 0;
     formatedSeconde = '00'
     minute = 0;
     document.getElementById('timer').innerText = `${minute}:${formatedSeconde}`;
+    document.getElementsByTagName('button')[0].disabled = false;
 }
 
 const dropMenu = document.getElementById('dropdown-menu');
@@ -64,17 +58,30 @@ function selectChr(event) {
 }
 
 function verification(e) {
-    for (let i = 0; i < 3; i++) {
+    var isRight = false 
+    for (let i = 0; i < characters.length; i++) {
         if ((pointerX <= characters[i].posX + 100 && pointerX >= characters[i].posX) && (pointerY <= characters[i].posY + 100 && pointerY >= characters[i].posY)) {
             if (characters[i].name === e.innerText) {
-                console.log('oui bravo')
-            }
-            else {
-                console.log('ah bah non');
+                characters.splice(i, 1);
+                dropMenu.removeChild(dropMenu.children[i]);
+                if (isGameEnded()) {
+                    console.log(document.getElementById('timer').innerText);
+                    stopGame();
+                }
+                return;
             }
         }
-        else {
-            console.log('nope');
-        }
+    }
+    if (!isRight) {
+        window.alert('wrong');
+    }
+}
+
+function isGameEnded () {
+    if (characters.length === 0) {
+        return true;
+    }
+    else {
+        return false
     }
 }
